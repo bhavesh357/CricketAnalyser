@@ -29,6 +29,13 @@ public class CricketAnalyser {
         return getJson(censusList);
     }
 
+    public String getPlayerBestBattingSR() {
+        checkIfNull(playerMap);
+        Comparator<PlayerDAO> comparing = Comparator.comparingDouble(census -> census.battingSR);
+        ArrayList censusList= getSortedArray(comparing.reversed());
+        return getJson(censusList);
+    }
+
     private void checkIfNull(Map<String, PlayerDAO> list){
         if(list == null || list.size()==0){
             throw new CricketAnalyserException("No Stats Data",CricketAnalyserException.ExceptionType.NO_STATS_DATA);
@@ -36,17 +43,12 @@ public class CricketAnalyser {
     }
 
     private ArrayList getSortedArray(Comparator<PlayerDAO> comparing) {
-        Stream<Object> objectStream = playerMap.values()
-                .stream()
-                .sorted(comparing)
-                .map(playerDAO -> playerDAO.getCensusDTO(type));
-        Collector<Object, ?, ArrayList<Object>> objectArrayListCollector = Collectors.toCollection(ArrayList::new);
-        ArrayList<Object> collect = objectStream.collect(objectArrayListCollector);
-        return collect;
+        return playerMap.values().stream().sorted(comparing).map(playerDAO -> playerDAO.getCensusDTO(type)).collect(Collectors.toCollection(ArrayList::new));
     }
 
     private String getJson(List list){
         String json = new Gson().toJson(list);
         return json;
     }
+
 }
