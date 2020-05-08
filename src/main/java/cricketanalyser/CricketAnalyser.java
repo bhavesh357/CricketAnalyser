@@ -38,7 +38,8 @@ public class CricketAnalyser {
 
     public String getPlayerMostBoundries() {
         checkIfNull(playerMap);
-        Comparator<PlayerDAO> comparing = Comparator.comparingInt(census -> census.boundries);
+        Comparator<PlayerDAO> comparing = Comparator.comparingInt(census -> census.sixes);
+        comparing.thenComparingInt(census -> census.fours);
         ArrayList censusList= getSortedArray(comparing.reversed());
         return getJson(censusList);
     }
@@ -47,7 +48,17 @@ public class CricketAnalyser {
     public String getPlayerBestSR6s4s() {
         checkIfNull(playerMap);
         Comparator<PlayerDAO> comparing = Comparator.comparingDouble(census -> census.battingSR);
-        comparing.thenComparingInt(census -> census.boundries);
+        comparing.thenComparingInt(census -> census.sixes);
+        comparing.thenComparingInt(census -> census.fours);
+        ArrayList censusList= getSortedArray(comparing.reversed());
+        return getJson(censusList);
+    }
+
+
+    public String getPlayerBestAverageStrikeRate() {
+        checkIfNull(playerMap);
+        Comparator<PlayerDAO> comparing = Comparator.comparingDouble(census -> census.battingAvg);
+        comparing.thenComparingDouble(census -> census.battingSR);
         ArrayList censusList= getSortedArray(comparing.reversed());
         return getJson(censusList);
     }
