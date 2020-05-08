@@ -85,8 +85,8 @@ public class CricketAnalyserTest {
         CricketAnalyser cricketAnalyser = new CricketAnalyser();
         cricketAnalyser.loadBowlerData(BOWLER_STATS_CSV_FILE_PATH);
         String sortedStats = cricketAnalyser.getPlayerBestBowlingAverage();
-        BowlerCSV[] batsmanCSVS = new Gson().fromJson(sortedStats, BowlerCSV[].class);
-        Assert.assertEquals("Suresh Raina",batsmanCSVS[0].name);
+        BowlerCSV[] bowlerCSVS = new Gson().fromJson(sortedStats, BowlerCSV[].class);
+        Assert.assertEquals("Suresh Raina",bowlerCSVS[0].name);
     }
 
     @Test
@@ -94,7 +94,16 @@ public class CricketAnalyserTest {
         CricketAnalyser cricketAnalyser = new CricketAnalyser();
         cricketAnalyser.loadBowlerData(BOWLER_STATS_CSV_FILE_PATH);
         String sortedStats = cricketAnalyser.getPlayerBestBowlingStrikerate();
-        BowlerCSV[] batsmanCSVS = new Gson().fromJson(sortedStats, BowlerCSV[].class);
-        Assert.assertEquals("Suresh Raina",batsmanCSVS[0].name);
+        BowlerCSV[] bowlerCSVS = new Gson().fromJson(sortedStats, BowlerCSV[].class);
+        Assert.assertEquals("Suresh Raina",bowlerCSVS[0].name);
+    }
+
+    @Test
+    public void whenGivenBowlerStats_ShouldReturnPlayerWithBestBowlingEconomy() {
+        CricketAnalyser cricketAnalyser = new CricketAnalyser();
+        cricketAnalyser.loadBowlerData(BOWLER_STATS_CSV_FILE_PATH);
+        String sortedStats = cricketAnalyser.getPlayerBestBowlingEconomy();
+        BowlerCSV[] bowlerCSVS = new Gson().fromJson(sortedStats, BowlerCSV[].class);
+        Assert.assertEquals("Suresh Raina",bowlerCSVS[0].name);
     }
 }

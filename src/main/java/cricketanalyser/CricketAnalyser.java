@@ -92,6 +92,14 @@ public class CricketAnalyser {
         return getJson(censusList);
     }
 
+
+    public String getPlayerBestBowlingEconomy() {
+        checkIfNull(playerMap);
+        Comparator<PlayerDAO> comparing = Comparator.comparingDouble(census -> census.economy);
+        ArrayList censusList= getSortedArray(comparing);
+        return getJson(censusList);
+    }
+
     private void checkIfNull(Map<String, PlayerDAO> list){
         if(list == null || list.size()==0){
             throw new CricketAnalyserException("No Stats Data",CricketAnalyserException.ExceptionType.NO_STATS_DATA);
