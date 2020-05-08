@@ -63,6 +63,14 @@ public class CricketAnalyser {
         return getJson(censusList);
     }
 
+    public String getPlayerMostRunsBestAverage() {
+        checkIfNull(playerMap);
+        Comparator<PlayerDAO> comparing = Comparator.comparingInt(census -> census.runsScored);
+        comparing.thenComparingDouble(census -> census.battingAvg);
+        ArrayList censusList= getSortedArray(comparing.reversed());
+        return getJson(censusList);
+    }
+
     private void checkIfNull(Map<String, PlayerDAO> list){
         if(list == null || list.size()==0){
             throw new CricketAnalyserException("No Stats Data",CricketAnalyserException.ExceptionType.NO_STATS_DATA);

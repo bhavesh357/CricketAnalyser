@@ -61,4 +61,13 @@ public class CricketAnalyserTest {
         BatsmanCSV[] batsmanCSVS = new Gson().fromJson(sortedStats, BatsmanCSV[].class);
         Assert.assertEquals("MS Dhoni",batsmanCSVS[0].name);
     }
+
+    @Test
+    public void whenGivenBatsmanStats_ShouldReturnPlayerMostRunsBestAverage() {
+        CricketAnalyser cricketAnalyser = new CricketAnalyser();
+        cricketAnalyser.loadBatsmanData(BATSMAN_STATS_CSV_FILE_PATH);
+        String sortedStats = cricketAnalyser.getPlayerMostRunsBestAverage();
+        BatsmanCSV[] batsmanCSVS = new Gson().fromJson(sortedStats, BatsmanCSV[].class);
+        Assert.assertEquals("David Warner",batsmanCSVS[0].name);
+    }
 }
