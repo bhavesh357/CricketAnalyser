@@ -112,8 +112,16 @@ public class CricketAnalyser {
     public String getPlayerBestAverageSR() {
         checkIfNull(playerMap);
         Comparator<PlayerDAO> comparing = Comparator.comparingDouble(census -> census.bowlingAvg);
-        comparing.thenComparingDouble(census -> census.bowlingSR)
+        comparing.thenComparingDouble(census -> census.bowlingSR);
         ArrayList censusList= getSortedArray(comparing);
+        return getJson(censusList);
+    }
+
+    public String getPlayerMostWicketsBestAverage() {
+        checkIfNull(playerMap);
+        Comparator<PlayerDAO> comparing = Comparator.comparingInt(census -> census.wickets);
+        comparing.thenComparingDouble(census -> census.bowlingSR);
+        ArrayList censusList= getSortedArray(comparing.reversed());
         return getJson(censusList);
     }
 
@@ -131,5 +139,6 @@ public class CricketAnalyser {
         String json = new Gson().toJson(list);
         return json;
     }
+
 
 }
