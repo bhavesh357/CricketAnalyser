@@ -1,4 +1,4 @@
-package csvBuilder;
+package cricketanalyser.csvBuilder;
 
 public class CSVBuilderFactory {
 

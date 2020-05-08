@@ -1,4 +1,4 @@
-package csvBuilder;
+package cricketanalyser.csvBuilder;
 
 import java.io.Reader;
 import java.util.Iterator;

@@ -1,4 +1,6 @@
-import model.PlayerDAO;
+package cricketanalyser;
+
+import cricketanalyser.model.PlayerDAO;
 
 import java.util.Map;
 

@@ -1,11 +1,12 @@
+package cricketanalyser;
 
-import csvBuilder.CSVBuilderFactory;
-import csvBuilder.ICSVBuilder;
-import exceptions.CSVBuilderException;
-import exceptions.CricketAnalyserException;
-import model.BatsmanCSV;
-import model.BowlerCSV;
-import model.PlayerDAO;
+import cricketanalyser.csvBuilder.CSVBuilderFactory;
+import cricketanalyser.csvBuilder.ICSVBuilder;
+import cricketanalyser.exceptions.CSVBuilderException;
+import cricketanalyser.exceptions.CricketAnalyserException;
+import cricketanalyser.model.BatsmanCSV;
+import cricketanalyser.model.BowlerCSV;
+import cricketanalyser.model.PlayerDAO;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -28,15 +29,15 @@ public class PlayerAdapter {
             Map<String, PlayerDAO> censusCSVMap = new HashMap<String, PlayerDAO>();
             if (type.equals(PLAYER_TYPE.BATSMAN)) {
                 Stream<BatsmanCSV> streamPlayer = stream.map(BatsmanCSV.class::cast);
-                streamPlayer.forEach(censusCSV -> censusCSVMap.put(censusCSV.name,new PlayerDAO(censusCSV)));
+                streamPlayer.forEach(playerCSV -> censusCSVMap.put(playerCSV.name,new PlayerDAO(playerCSV)));
             }else if(type.equals(PLAYER_TYPE.BOWLER)){
                 Stream<BowlerCSV> streamIndia = stream.map(BowlerCSV.class::cast);
-                streamIndia.forEach(censusCSV -> censusCSVMap.put(censusCSV.name,new PlayerDAO(censusCSV)));
+                streamIndia.forEach(playerCSV -> censusCSVMap.put(playerCSV.name,new PlayerDAO(playerCSV)));
             }
             return censusCSVMap;
         } catch (IOException e) {
             throw new CricketAnalyserException(e.getMessage(),
-                    CricketAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
+                    CricketAnalyserException.ExceptionType.STATS_FILE_PROBLEM);
         } catch (CSVBuilderException e) {
             throw new CricketAnalyserException(e.getMessage(),e.type.name());
         }

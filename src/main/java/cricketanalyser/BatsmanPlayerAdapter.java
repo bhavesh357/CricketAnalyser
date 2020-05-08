@@ -1,5 +1,7 @@
-import model.BatsmanCSV;
-import model.PlayerDAO;
+package cricketanalyser;
+
+import cricketanalyser.model.BatsmanCSV;
+import cricketanalyser.model.PlayerDAO;
 
 import java.util.Map;
 

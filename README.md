@@ -1,1 +1,1 @@
-"# CricketAnalyser" 
+"# cricketanalyser.CricketAnalyser" 

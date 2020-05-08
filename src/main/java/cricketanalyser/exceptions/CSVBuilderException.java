@@ -1,4 +1,4 @@
-package exceptions;
+package cricketanalyser.exceptions;
 
 public class CSVBuilderException extends RuntimeException {
     public enum ExceptionType {
