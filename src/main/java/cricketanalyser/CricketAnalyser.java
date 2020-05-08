@@ -120,7 +120,7 @@ public class CricketAnalyser {
     public String getPlayerMostWicketsBestAverage() {
         checkIfNull(playerMap);
         Comparator<PlayerDAO> comparing = Comparator.comparingInt(census -> census.wickets);
-        comparing.thenComparingDouble(census -> census.bowlingSR);
+        comparing.thenComparingDouble(census -> census.bowlingAvg);
         ArrayList censusList= getSortedArray(comparing.reversed());
         return getJson(censusList);
     }
