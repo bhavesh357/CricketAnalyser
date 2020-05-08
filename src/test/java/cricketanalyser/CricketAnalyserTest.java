@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import cricketanalyser.CricketAnalyser;
 import cricketanalyser.model.BatsmanCSV;
 import cricketanalyser.model.BowlerCSV;
+import cricketanalyser.model.PlayerDAO;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -77,7 +78,7 @@ public class CricketAnalyserTest {
     public void whenGivenBowlerStats_ShouldReturn() {
         CricketAnalyser cricketAnalyser = new CricketAnalyser();
         int count=cricketAnalyser.loadBowlerData(BOWLER_STATS_CSV_FILE_PATH);
-        Assert.assertEquals(100,count);
+        Assert.assertEquals(99,count);
     }
 
     @Test
@@ -104,7 +105,7 @@ public class CricketAnalyserTest {
         cricketAnalyser.loadBowlerData(BOWLER_STATS_CSV_FILE_PATH);
         String sortedStats = cricketAnalyser.getPlayerBestBowlingEconomy();
         BowlerCSV[] bowlerCSVS = new Gson().fromJson(sortedStats, BowlerCSV[].class);
-        Assert.assertEquals("Suresh Raina",bowlerCSVS[0].name);
+        Assert.assertEquals("Shivam Dube",bowlerCSVS[0].name);
     }
 
     @Test
@@ -132,5 +133,14 @@ public class CricketAnalyserTest {
         String sortedStats = cricketAnalyser.getPlayerMostWicketsBestAverage();
         BowlerCSV[] bowlerCSVS = new Gson().fromJson(sortedStats, BowlerCSV[].class);
         Assert.assertEquals("Imran Tahir",bowlerCSVS[0].name);
+    }
+
+    @Test
+    public void whenGivenBatsmanAndBowlerStats_ShouldReturnPlayerWithBestBattingAndBowlingAverages() {
+        CricketAnalyser cricketAnalyser = new CricketAnalyser();
+        cricketAnalyser.loadBothData(BATSMAN_STATS_CSV_FILE_PATH,BOWLER_STATS_CSV_FILE_PATH);
+        String sortedStats = cricketAnalyser.getPlayerBestBattingAndBowlingAverages();
+        PlayerDAO[] bowlerCSVS = new Gson().fromJson(sortedStats, PlayerDAO[].class);
+        Assert.assertEquals("MS Dhoni",bowlerCSVS[0].name);
     }
 }

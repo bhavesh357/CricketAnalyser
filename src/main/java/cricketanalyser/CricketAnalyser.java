@@ -2,48 +2,88 @@ package cricketanalyser;
 
 import com.google.gson.Gson;
 import cricketanalyser.exceptions.CricketAnalyserException;
+import cricketanalyser.model.BowlerCSV;
 import cricketanalyser.model.PlayerDAO;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class CricketAnalyser {
     private PlayerAdapter.PLAYER_TYPE type;
-    private Map<String, PlayerDAO> playerMap;
+    private Map<String, PlayerDAO> playersMap;
+
+    public int loadBothData(String batsmanStatsCsvFilePath, String bowlerStatsCsvFilePath) {
+        loadBatsmanData(batsmanStatsCsvFilePath);
+        Map<String, PlayerDAO> playerMapBatsman = this.playersMap;
+        loadBowlerData(bowlerStatsCsvFilePath);
+        mergeMaps(playerMapBatsman);
+        return this.playersMap.size();
+    }
+
+    private void mergeMaps(Map<String, PlayerDAO> playerMapBatsman) {
+        ArrayList<String> names = getKeysInArrayList(playerMapBatsman);
+        names.addAll(getKeysInArrayList(playersMap));
+        for(String name : names){
+            PlayerDAO playerDAO = playersMap.get(name);
+            if(playerDAO!=null){
+                playerDAO=playersMap.get(name);
+                playerDAO.battingAvg=0.0;
+                playerDAO.battingSR=0.0;
+                playerDAO.sixes=0;
+                playerDAO.fours=0;
+                playerDAO.boundries=0;
+                playerDAO.runsScored=0;
+            }else {
+                playersMap.put(name,new PlayerDAO(new BowlerCSV(name,0.0,0.0,0.0,0,0,0)));
+                playerDAO = playersMap.get(name);
+                playerDAO.battingAvg = playerMapBatsman.get(name).battingAvg;
+                playerDAO.battingSR = playerMapBatsman.get(name).battingSR;
+                playerDAO.sixes = playerMapBatsman.get(name).sixes;
+                playerDAO.fours = playerMapBatsman.get(name).fours;
+                playerDAO.boundries = playerMapBatsman.get(name).boundries;
+                playerDAO.runsScored = playerMapBatsman.get(name).runsScored;
+            }
+        }
+    }
+
+    private ArrayList<String> getKeysInArrayList(Map<String, PlayerDAO> map) {
+        ArrayList<String> objects = new ArrayList<>();
+        for(String key: map.keySet()){
+            objects.add(key);
+        }
+        return objects;
+    }
 
     public int loadBatsmanData(String csvFilePath) {
         type = PlayerAdapter.PLAYER_TYPE.BATSMAN;
-        playerMap=PlayerAdapterFactory.getData(type,csvFilePath);
-        return playerMap.size();
+        playersMap=PlayerAdapterFactory.getData(type,csvFilePath);
+        return playersMap.size();
     }
 
     public int loadBowlerData(String csvFilePath) {
         type = PlayerAdapter.PLAYER_TYPE.BOWLER;
-        playerMap=PlayerAdapterFactory.getData(type,csvFilePath);
-        return playerMap.size();
+        playersMap=PlayerAdapterFactory.getData(type,csvFilePath);
+        return playersMap.size();
     }
 
     public String getPlayerBestBattingAverage() {
-        checkIfNull(playerMap);
+        checkIfNull(playersMap);
         Comparator<PlayerDAO> comparing = Comparator.comparingDouble(census -> census.battingAvg);
         ArrayList censusList= getSortedArray(comparing.reversed());
         return getJson(censusList);
     }
 
     public String getPlayerBestBattingSR() {
-        checkIfNull(playerMap);
+        checkIfNull(playersMap);
         Comparator<PlayerDAO> comparing = Comparator.comparingDouble(census -> census.battingSR);
         ArrayList censusList= getSortedArray(comparing.reversed());
         return getJson(censusList);
     }
 
     public String getPlayerMostBoundries() {
-        checkIfNull(playerMap);
+        checkIfNull(playersMap);
         Comparator<PlayerDAO> comparing = Comparator.comparingInt(census -> census.sixes);
         comparing.thenComparingInt(census -> census.fours);
         ArrayList censusList= getSortedArray(comparing.reversed());
@@ -52,7 +92,7 @@ public class CricketAnalyser {
 
 
     public String getPlayerBestSR6s4s() {
-        checkIfNull(playerMap);
+        checkIfNull(playersMap);
         Comparator<PlayerDAO> comparing = Comparator.comparingDouble(census -> census.battingSR);
         comparing.thenComparingInt(census -> census.sixes);
         comparing.thenComparingInt(census -> census.fours);
@@ -62,7 +102,7 @@ public class CricketAnalyser {
 
 
     public String getPlayerBestAverageStrikeRate() {
-        checkIfNull(playerMap);
+        checkIfNull(playersMap);
         Comparator<PlayerDAO> comparing = Comparator.comparingDouble(census -> census.battingAvg);
         comparing.thenComparingDouble(census -> census.battingSR);
         ArrayList censusList= getSortedArray(comparing.reversed());
@@ -70,7 +110,7 @@ public class CricketAnalyser {
     }
 
     public String getPlayerMostRunsBestAverage() {
-        checkIfNull(playerMap);
+        checkIfNull(playersMap);
         Comparator<PlayerDAO> comparing = Comparator.comparingInt(census -> census.runsScored);
         comparing.thenComparingDouble(census -> census.battingAvg);
         ArrayList censusList= getSortedArray(comparing.reversed());
@@ -78,7 +118,7 @@ public class CricketAnalyser {
     }
 
     public String getPlayerBestBowlingAverage() {
-        checkIfNull(playerMap);
+        checkIfNull(playersMap);
         Comparator<PlayerDAO> comparing = Comparator.comparingDouble(census -> census.bowlingAvg);
         ArrayList censusList= getSortedArray(comparing);
         return getJson(censusList);
@@ -86,7 +126,7 @@ public class CricketAnalyser {
 
 
     public String getPlayerBestBowlingStrikerate() {
-        checkIfNull(playerMap);
+        checkIfNull(playersMap);
         Comparator<PlayerDAO> comparing = Comparator.comparingDouble(census -> census.bowlingSR);
         ArrayList censusList= getSortedArray(comparing);
         return getJson(censusList);
@@ -94,14 +134,14 @@ public class CricketAnalyser {
 
 
     public String getPlayerBestBowlingEconomy() {
-        checkIfNull(playerMap);
+        checkIfNull(playersMap);
         Comparator<PlayerDAO> comparing = Comparator.comparingDouble(census -> census.economy);
         ArrayList censusList= getSortedArray(comparing);
         return getJson(censusList);
     }
 
     public String getPlayerBestSR5W4W() {
-        checkIfNull(playerMap);
+        checkIfNull(playersMap);
         Comparator<PlayerDAO> comparing = Comparator.comparingDouble(census -> census.bowlingSR);
         comparing.thenComparingInt(census -> census.fiveWickets);
         comparing.thenComparingInt(census -> census.fourWickets);
@@ -110,7 +150,7 @@ public class CricketAnalyser {
     }
 
     public String getPlayerBestAverageSR() {
-        checkIfNull(playerMap);
+        checkIfNull(playersMap);
         Comparator<PlayerDAO> comparing = Comparator.comparingDouble(census -> census.bowlingAvg);
         comparing.thenComparingDouble(census -> census.bowlingSR);
         ArrayList censusList= getSortedArray(comparing);
@@ -118,8 +158,21 @@ public class CricketAnalyser {
     }
 
     public String getPlayerMostWicketsBestAverage() {
-        checkIfNull(playerMap);
+        checkIfNull(playersMap);
         Comparator<PlayerDAO> comparing = Comparator.comparingInt(census -> census.wickets);
+        comparing.thenComparingDouble(census -> census.bowlingAvg);
+        ArrayList censusList= getSortedArray(comparing.reversed());
+        return getJson(censusList);
+    }
+
+    public String getPlayerBestBattingAndBowlingAverages() {
+        checkIfNull(playersMap);
+        for(PlayerDAO p: playersMap.values()){
+            if(p.battingAvg==null || p.bowlingAvg==null){
+                System.out.println(p);
+            }
+        }
+        Comparator<PlayerDAO> comparing = Comparator.comparingDouble(census -> census.battingAvg);
         comparing.thenComparingDouble(census -> census.bowlingAvg);
         ArrayList censusList= getSortedArray(comparing.reversed());
         return getJson(censusList);
@@ -132,13 +185,12 @@ public class CricketAnalyser {
     }
 
     private ArrayList getSortedArray(Comparator<PlayerDAO> comparing) {
-        return playerMap.values().stream().sorted(comparing).map(playerDAO -> playerDAO.getCensusDTO(type)).collect(Collectors.toCollection(ArrayList::new));
+        return playersMap.values().stream().sorted(comparing).map(playerDAO -> playerDAO.getCensusDTO(type)).collect(Collectors.toCollection(ArrayList::new));
     }
 
     private String getJson(List list){
         String json = new Gson().toJson(list);
         return json;
     }
-
 
 }

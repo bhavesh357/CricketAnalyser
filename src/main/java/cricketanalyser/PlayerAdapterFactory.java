@@ -12,4 +12,5 @@ public class PlayerAdapterFactory {
             return new BowlerPlayerAdapter().loadData(type,csvFilePath);
         }
     }
+
 }
