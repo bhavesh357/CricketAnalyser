@@ -22,6 +22,12 @@ public class CricketAnalyser {
         return playerMap.size();
     }
 
+    public int loadBowlerData(String csvFilePath) {
+        type = PlayerAdapter.PLAYER_TYPE.BOWLER;
+        playerMap=PlayerAdapterFactory.getData(type,csvFilePath);
+        return playerMap.size();
+    }
+
     public String getPlayerBestBattingAverage() {
         checkIfNull(playerMap);
         Comparator<PlayerDAO> comparing = Comparator.comparingDouble(census -> census.battingAvg);
@@ -71,6 +77,13 @@ public class CricketAnalyser {
         return getJson(censusList);
     }
 
+    public String getPlayerBestBowlingAverage() {
+        checkIfNull(playerMap);
+        Comparator<PlayerDAO> comparing = Comparator.comparingDouble(census -> census.bowlingAvg);
+        ArrayList censusList= getSortedArray(comparing);
+        return getJson(censusList);
+    }
+
     private void checkIfNull(Map<String, PlayerDAO> list){
         if(list == null || list.size()==0){
             throw new CricketAnalyserException("No Stats Data",CricketAnalyserException.ExceptionType.NO_STATS_DATA);
@@ -85,5 +98,4 @@ public class CricketAnalyser {
         String json = new Gson().toJson(list);
         return json;
     }
-
 }
