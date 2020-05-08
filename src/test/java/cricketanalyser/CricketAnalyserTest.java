@@ -143,4 +143,13 @@ public class CricketAnalyserTest {
         PlayerDAO[] bowlerCSVS = new Gson().fromJson(sortedStats, PlayerDAO[].class);
         Assert.assertEquals("Andre Russell",bowlerCSVS[0].name);
     }
+
+    @Test
+    public void whenGivenBatsmanAndBowlerStats_ShouldReturnPlayerWithMostRunsAndWickets() {
+        CricketAnalyser cricketAnalyser = new CricketAnalyser();
+        cricketAnalyser.loadBothData(BATSMAN_STATS_CSV_FILE_PATH,BOWLER_STATS_CSV_FILE_PATH);
+        String sortedStats = cricketAnalyser.getPlayerMostRunsAndWickets();
+        PlayerDAO[] bowlerCSVS = new Gson().fromJson(sortedStats, PlayerDAO[].class);
+        Assert.assertEquals("Andre Russell",bowlerCSVS[0].name);
+    }
 }

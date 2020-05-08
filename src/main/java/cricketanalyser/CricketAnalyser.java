@@ -23,8 +23,6 @@ public class CricketAnalyser {
     }
 
     private void mergeMaps(Map<String, PlayerDAO> playerMapBatsman) {
-        ArrayList<String> names = getKeysInArrayList(playerMapBatsman);
-        names.addAll(getKeysInArrayList(playersMap));
         Map<String,PlayerDAO> allRounders = new HashMap<>();
         for(String name : playersMap.keySet()){
             if(playerMapBatsman.get(name)!=null){
@@ -39,14 +37,6 @@ public class CricketAnalyser {
             }
         }
         playersMap=allRounders;
-    }
-
-    private ArrayList<String> getKeysInArrayList(Map<String, PlayerDAO> map) {
-        ArrayList<String> objects = new ArrayList<>();
-        for(String key: map.keySet()){
-            objects.add(key);
-        }
-        return objects;
     }
 
     public int loadBatsmanData(String csvFilePath) {
@@ -160,13 +150,16 @@ public class CricketAnalyser {
 
     public String getPlayerBestBattingAndBowlingAverages() {
         checkIfNull(playersMap);
-        for(PlayerDAO p: playersMap.values()){
-            if(p.battingAvg==null || p.bowlingAvg==null){
-                System.out.println(p);
-            }
-        }
         Comparator<PlayerDAO> comparing = Comparator.comparingDouble(census -> census.battingAvg);
         comparing.thenComparingDouble(census -> census.bowlingAvg);
+        ArrayList censusList= getSortedArray(comparing.reversed());
+        return getJson(censusList);
+    }
+
+    public String getPlayerMostRunsAndWickets() {
+        checkIfNull(playersMap);
+        Comparator<PlayerDAO> comparing = Comparator.comparingInt(census -> census.runsScored);
+        comparing.thenComparingInt(census -> census.wickets);
         ArrayList censusList= getSortedArray(comparing.reversed());
         return getJson(censusList);
     }
