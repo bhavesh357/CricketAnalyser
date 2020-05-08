@@ -43,4 +43,13 @@ public class CricketAnalyserTest {
         BatsmanCSV[] batsmanCSVS = new Gson().fromJson(sortedStats, BatsmanCSV[].class);
         Assert.assertEquals("Andre Russell",batsmanCSVS[0].name);
     }
+
+    @Test
+    public void whenGivenBatsmanStats_ShouldReturnPlayerBestSR6s4s() {
+        CricketAnalyser cricketAnalyser = new CricketAnalyser();
+        cricketAnalyser.loadBatsmanData(BATSMAN_STATS_CSV_FILE_PATH);
+        String sortedStats = cricketAnalyser.getPlayerBestSR6s4s();
+        BatsmanCSV[] batsmanCSVS = new Gson().fromJson(sortedStats, BatsmanCSV[].class);
+        Assert.assertEquals("Ishant Sharma",batsmanCSVS[0].name);
+    }
 }
