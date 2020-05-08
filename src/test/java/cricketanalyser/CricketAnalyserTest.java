@@ -115,4 +115,13 @@ public class CricketAnalyserTest {
         BowlerCSV[] bowlerCSVS = new Gson().fromJson(sortedStats, BowlerCSV[].class);
         Assert.assertEquals("Suresh Raina",bowlerCSVS[0].name);
     }
+
+    @Test
+    public void whenGivenBowlerStats_ShouldReturnPlayerWithBestAverageSR() {
+        CricketAnalyser cricketAnalyser = new CricketAnalyser();
+        cricketAnalyser.loadBowlerData(BOWLER_STATS_CSV_FILE_PATH);
+        String sortedStats = cricketAnalyser.getPlayerBestAverageSR();
+        BowlerCSV[] bowlerCSVS = new Gson().fromJson(sortedStats, BowlerCSV[].class);
+        Assert.assertEquals("Suresh Raina",bowlerCSVS[0].name);
+    }
 }
