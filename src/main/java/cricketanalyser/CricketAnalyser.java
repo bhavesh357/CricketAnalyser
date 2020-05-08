@@ -84,6 +84,14 @@ public class CricketAnalyser {
         return getJson(censusList);
     }
 
+
+    public String getPlayerBestBowlingStrikerate() {
+        checkIfNull(playerMap);
+        Comparator<PlayerDAO> comparing = Comparator.comparingDouble(census -> census.bowlingSR);
+        ArrayList censusList= getSortedArray(comparing);
+        return getJson(censusList);
+    }
+
     private void checkIfNull(Map<String, PlayerDAO> list){
         if(list == null || list.size()==0){
             throw new CricketAnalyserException("No Stats Data",CricketAnalyserException.ExceptionType.NO_STATS_DATA);
@@ -98,4 +106,5 @@ public class CricketAnalyser {
         String json = new Gson().toJson(list);
         return json;
     }
+
 }

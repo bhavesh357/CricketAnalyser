@@ -3,6 +3,7 @@ package cricketanalyser;
 import com.google.gson.Gson;
 import cricketanalyser.CricketAnalyser;
 import cricketanalyser.model.BatsmanCSV;
+import cricketanalyser.model.BowlerCSV;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -80,11 +81,20 @@ public class CricketAnalyserTest {
     }
 
     @Test
-    public void whenGivenBowlerStats_ShouldReturnPlayerWithBestBattingAverage() {
+    public void whenGivenBowlerStats_ShouldReturnPlayerWithBestBowlingAverage() {
         CricketAnalyser cricketAnalyser = new CricketAnalyser();
         cricketAnalyser.loadBowlerData(BOWLER_STATS_CSV_FILE_PATH);
         String sortedStats = cricketAnalyser.getPlayerBestBowlingAverage();
-        BatsmanCSV[] batsmanCSVS = new Gson().fromJson(sortedStats, BatsmanCSV[].class);
+        BowlerCSV[] batsmanCSVS = new Gson().fromJson(sortedStats, BowlerCSV[].class);
+        Assert.assertEquals("Suresh Raina",batsmanCSVS[0].name);
+    }
+
+    @Test
+    public void whenGivenBowlerStats_ShouldReturnPlayerWithBestBowlingStrikeRate() {
+        CricketAnalyser cricketAnalyser = new CricketAnalyser();
+        cricketAnalyser.loadBowlerData(BOWLER_STATS_CSV_FILE_PATH);
+        String sortedStats = cricketAnalyser.getPlayerBestBowlingStrikerate();
+        BowlerCSV[] batsmanCSVS = new Gson().fromJson(sortedStats, BowlerCSV[].class);
         Assert.assertEquals("Suresh Raina",batsmanCSVS[0].name);
     }
 }
