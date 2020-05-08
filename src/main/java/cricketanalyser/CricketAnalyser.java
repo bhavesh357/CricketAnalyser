@@ -25,27 +25,20 @@ public class CricketAnalyser {
     private void mergeMaps(Map<String, PlayerDAO> playerMapBatsman) {
         ArrayList<String> names = getKeysInArrayList(playerMapBatsman);
         names.addAll(getKeysInArrayList(playersMap));
-        for(String name : names){
-            PlayerDAO playerDAO = playersMap.get(name);
-            if(playerDAO!=null){
-                playerDAO=playersMap.get(name);
-                playerDAO.battingAvg=0.0;
-                playerDAO.battingSR=0.0;
-                playerDAO.sixes=0;
-                playerDAO.fours=0;
-                playerDAO.boundries=0;
-                playerDAO.runsScored=0;
-            }else {
-                playersMap.put(name,new PlayerDAO(new BowlerCSV(name,0.0,0.0,0.0,0,0,0)));
-                playerDAO = playersMap.get(name);
+        Map<String,PlayerDAO> allRounders = new HashMap<>();
+        for(String name : playersMap.keySet()){
+            if(playerMapBatsman.get(name)!=null){
+                PlayerDAO playerDAO = playersMap.get(name);
                 playerDAO.battingAvg = playerMapBatsman.get(name).battingAvg;
                 playerDAO.battingSR = playerMapBatsman.get(name).battingSR;
                 playerDAO.sixes = playerMapBatsman.get(name).sixes;
                 playerDAO.fours = playerMapBatsman.get(name).fours;
                 playerDAO.boundries = playerMapBatsman.get(name).boundries;
                 playerDAO.runsScored = playerMapBatsman.get(name).runsScored;
+                allRounders.put(name,playerDAO);
             }
         }
+        playersMap=allRounders;
     }
 
     private ArrayList<String> getKeysInArrayList(Map<String, PlayerDAO> map) {

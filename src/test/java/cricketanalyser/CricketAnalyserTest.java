@@ -141,6 +141,6 @@ public class CricketAnalyserTest {
         cricketAnalyser.loadBothData(BATSMAN_STATS_CSV_FILE_PATH,BOWLER_STATS_CSV_FILE_PATH);
         String sortedStats = cricketAnalyser.getPlayerBestBattingAndBowlingAverages();
         PlayerDAO[] bowlerCSVS = new Gson().fromJson(sortedStats, PlayerDAO[].class);
-        Assert.assertEquals("MS Dhoni",bowlerCSVS[0].name);
+        Assert.assertEquals("Andre Russell",bowlerCSVS[0].name);
     }
 }
