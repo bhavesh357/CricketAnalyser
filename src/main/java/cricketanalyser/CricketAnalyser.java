@@ -100,6 +100,15 @@ public class CricketAnalyser {
         return getJson(censusList);
     }
 
+    public String getPlayerBestSR5W4W() {
+        checkIfNull(playerMap);
+        Comparator<PlayerDAO> comparing = Comparator.comparingDouble(census -> census.bowlingSR);
+        comparing.thenComparingInt(census -> census.fiveWickets);
+        comparing.thenComparingInt(census -> census.fourWickets);
+        ArrayList censusList= getSortedArray(comparing);
+        return getJson(censusList);
+    }
+
     private void checkIfNull(Map<String, PlayerDAO> list){
         if(list == null || list.size()==0){
             throw new CricketAnalyserException("No Stats Data",CricketAnalyserException.ExceptionType.NO_STATS_DATA);
@@ -114,5 +123,6 @@ public class CricketAnalyser {
         String json = new Gson().toJson(list);
         return json;
     }
+
 
 }
