@@ -3,6 +3,7 @@ package cricketanalyser.model;
 import com.opencsv.bean.CsvBindByName;
 
 public class BatsmanCSV {
+    public int boundries;
     @CsvBindByName(column = "Player", required = true)
     public String name;
 

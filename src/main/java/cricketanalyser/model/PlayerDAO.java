@@ -15,6 +15,7 @@ public class PlayerDAO {
     public int fours;
     public int sixes;
     public int runsScored;
+    public int boundries;
 
     public PlayerDAO(BowlerCSV playerCSV) {
         name = playerCSV.name;
@@ -33,6 +34,7 @@ public class PlayerDAO {
         fours=playerCSV.fours;
         runsScored=playerCSV.runsScored;
         sixes=playerCSV.sixes;
+        boundries=fours+sixes;
     }
 
     public Object getCensusDTO(PlayerAdapter.PLAYER_TYPE type) {
