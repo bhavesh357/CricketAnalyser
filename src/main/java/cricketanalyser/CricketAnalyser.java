@@ -166,7 +166,7 @@ public class CricketAnalyser {
 
     private void checkIfNull(Map<String, PlayerDAO> list){
         if(list == null || list.size()==0){
-            throw new CricketAnalyserException("No Stats Data",CricketAnalyserException.ExceptionType.NO_STATS_DATA);
+            throw new CricketAnalyserException(CricketAnalyserException.message,CricketAnalyserException.ExceptionType.NO_STATS_DATA);
         }
     }
 
