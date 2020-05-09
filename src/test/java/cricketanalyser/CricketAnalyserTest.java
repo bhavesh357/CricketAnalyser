@@ -13,7 +13,7 @@ public class CricketAnalyserTest {
     private static final String BOWLER_STATS_CSV_FILE_PATH="./src/test/resources/IPL2019FactsheetMostWkts.csv";
 
     @Test
-    public void whenGivenBatsmanStats_ShouldReturn() {
+    public void whenGivenBatsmanStats_ShouldReturnTotalPlayers() {
         CricketAnalyser cricketAnalyser = new CricketAnalyser();
         int count=cricketAnalyser.loadBatsmanData(BATSMAN_STATS_CSV_FILE_PATH);
         Assert.assertEquals(100,count);
@@ -75,7 +75,7 @@ public class CricketAnalyserTest {
 
 
     @Test
-    public void whenGivenBowlerStats_ShouldReturn() {
+    public void whenGivenBowlerStats_ShouldReturnTotalPlayers() {
         CricketAnalyser cricketAnalyser = new CricketAnalyser();
         int count=cricketAnalyser.loadBowlerData(BOWLER_STATS_CSV_FILE_PATH);
         Assert.assertEquals(99,count);
