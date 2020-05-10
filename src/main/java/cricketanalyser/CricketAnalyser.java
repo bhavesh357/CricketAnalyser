@@ -70,7 +70,7 @@ public class CricketAnalyser {
     public String getPlayerMostBoundries() {
         checkIfNull(playersMap);
         Comparator<PlayerDAO> comparing = Comparator.comparingInt(census -> census.sixes);
-        comparing.thenComparingInt(census -> census.fours);
+        comparing = comparing.thenComparingInt(census -> census.fours);
         ArrayList censusList= getSortedArray(comparing.reversed());
         return getJson(censusList);
     }
@@ -79,8 +79,8 @@ public class CricketAnalyser {
     public String getPlayerBestSR6s4s() {
         checkIfNull(playersMap);
         Comparator<PlayerDAO> comparing = Comparator.comparingInt(census -> census.sixes);
-        comparing.thenComparingInt(census -> census.fours);
-        comparing.thenComparingDouble(census -> census.battingSR);
+        comparing = comparing.thenComparingInt(census -> census.fours);
+        comparing = comparing.thenComparingDouble(census -> census.battingSR);
         ArrayList censusList= getSortedArray(comparing.reversed());
         return getJson(censusList);
     }
@@ -89,7 +89,7 @@ public class CricketAnalyser {
     public String getPlayerBestAverageStrikeRate() {
         checkIfNull(playersMap);
         Comparator<PlayerDAO> comparing = Comparator.comparingDouble(census -> census.battingAvg);
-        comparing.thenComparingDouble(census -> census.battingSR);
+        comparing = comparing.thenComparingDouble(census -> census.battingSR);
         ArrayList censusList= getSortedArray(comparing.reversed());
         return getJson(censusList);
     }
@@ -97,9 +97,8 @@ public class CricketAnalyser {
     public String getPlayerMostRunsBestAverage() {
         checkIfNull(playersMap);
         Comparator<PlayerDAO> comparing = Comparator.comparingInt(census -> census.runsScored);
-        comparing = comparing.reversed();
         comparing = comparing.thenComparingDouble(census -> census.battingAvg);
-        ArrayList censusList= getSortedArray(comparing);
+        ArrayList censusList= getSortedArray(comparing.reversed());
         return getJson(censusList);
     }
 
@@ -132,9 +131,10 @@ public class CricketAnalyser {
 
     public String getPlayerBestSR5W4W() {
         checkIfNull(playersMap);
-        Comparator<PlayerDAO> comparing = Comparator.comparingDouble(census -> census.bowlingSR);
-        comparing.thenComparingInt(census -> census.fourWickets);
-        comparing.thenComparingInt(census -> census.fiveWickets);
+        Comparator<PlayerDAO> comparing = Comparator.comparingInt(census -> census.fiveWickets);
+        comparing = comparing.thenComparingInt(census -> census.fourWickets);
+        comparing = comparing.reversed();
+        comparing = comparing.thenComparingDouble(census -> census.bowlingSR);
         Predicate<PlayerDAO> filter = PlayerDAO.isbowlingSRZero();
         ArrayList censusList= getSortedArray(comparing,filter);
         return getJson(censusList);
@@ -152,16 +152,19 @@ public class CricketAnalyser {
     public String getPlayerMostWicketsBestAverage() {
         checkIfNull(playersMap);
         Comparator<PlayerDAO> comparing = Comparator.comparingInt(census -> census.wickets);
-        comparing.thenComparingDouble(census -> census.bowlingAvg);
-        ArrayList censusList= getSortedArray(comparing.reversed());
+        comparing = comparing.reversed();
+        comparing = comparing.thenComparingDouble(census -> census.bowlingAvg);
+        Predicate<PlayerDAO> filter = PlayerDAO.isAverageZero();
+        ArrayList censusList= getSortedArray(comparing,filter);
         return getJson(censusList);
     }
 
     public String getPlayerBestBattingAndBowlingAverages() {
         checkIfNull(playersMap);
         Comparator<PlayerDAO> comparing = Comparator.comparingDouble(census -> census.battingAvg);
-        comparing.thenComparingDouble(census -> census.bowlingAvg);
-        ArrayList censusList= getSortedArray(comparing.reversed());
+        comparing = comparing.reversed();
+        comparing = comparing.thenComparingDouble(census -> census.bowlingAvg);
+        ArrayList censusList= getSortedArray(comparing);
         return getJson(censusList);
     }
 
