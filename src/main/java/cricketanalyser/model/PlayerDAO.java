@@ -2,6 +2,8 @@ package cricketanalyser.model;
 
 import cricketanalyser.PlayerAdapter;
 
+import java.util.function.Predicate;
+
 public class PlayerDAO {
     public String name;
     public Double bowlingAvg;
@@ -37,11 +39,23 @@ public class PlayerDAO {
         boundries=fours+sixes;
     }
 
+    public static Predicate<PlayerDAO> isAverageZero() {
+        return p -> p.bowlingAvg != 0;
+    }
+
+    public static Predicate<PlayerDAO> isbowlingSRZero() {
+        return p -> p.bowlingSR != 0;
+    }
+
     public Object getCensusDTO(PlayerAdapter.PLAYER_TYPE type) {
         if(type.equals(PlayerAdapter.PLAYER_TYPE.BATSMAN)){
             return new BatsmanCSV(name,battingAvg,battingSR,fours,runsScored,sixes);
         }else{
             return new BowlerCSV(name,bowlingAvg,bowlingSR,economy,fiveWickets,fourWickets,wickets);
         }
+    }
+
+    public static Predicate<PlayerDAO> isEconomyZero(){
+        return p -> p.economy != 0;
     }
 }

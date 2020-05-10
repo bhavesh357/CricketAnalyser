@@ -5,7 +5,9 @@ import cricketanalyser.exceptions.CricketAnalyserException;
 import cricketanalyser.model.BowlerCSV;
 import cricketanalyser.model.PlayerDAO;
 
+import java.lang.reflect.Field;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -76,9 +78,9 @@ public class CricketAnalyser {
 
     public String getPlayerBestSR6s4s() {
         checkIfNull(playersMap);
-        Comparator<PlayerDAO> comparing = Comparator.comparingDouble(census -> census.battingSR);
-        comparing.thenComparingInt(census -> census.sixes);
+        Comparator<PlayerDAO> comparing = Comparator.comparingInt(census -> census.sixes);
         comparing.thenComparingInt(census -> census.fours);
+        comparing.thenComparingDouble(census -> census.battingSR);
         ArrayList censusList= getSortedArray(comparing.reversed());
         return getJson(censusList);
     }
@@ -95,15 +97,17 @@ public class CricketAnalyser {
     public String getPlayerMostRunsBestAverage() {
         checkIfNull(playersMap);
         Comparator<PlayerDAO> comparing = Comparator.comparingInt(census -> census.runsScored);
-        comparing.thenComparingDouble(census -> census.battingAvg);
-        ArrayList censusList= getSortedArray(comparing.reversed());
+        comparing = comparing.reversed();
+        comparing = comparing.thenComparingDouble(census -> census.battingAvg);
+        ArrayList censusList= getSortedArray(comparing);
         return getJson(censusList);
     }
 
     public String getPlayerBestBowlingAverage() {
         checkIfNull(playersMap);
         Comparator<PlayerDAO> comparing = Comparator.comparingDouble(census -> census.bowlingAvg);
-        ArrayList censusList= getSortedArray(comparing);
+        Predicate<PlayerDAO> filter = PlayerDAO.isAverageZero();
+        ArrayList censusList= getSortedArray(comparing,filter);
         return getJson(censusList);
     }
 
@@ -111,7 +115,8 @@ public class CricketAnalyser {
     public String getPlayerBestBowlingStrikerate() {
         checkIfNull(playersMap);
         Comparator<PlayerDAO> comparing = Comparator.comparingDouble(census -> census.bowlingSR);
-        ArrayList censusList= getSortedArray(comparing);
+        Predicate<PlayerDAO> filter = PlayerDAO.isbowlingSRZero();
+        ArrayList censusList= getSortedArray(comparing,filter);
         return getJson(censusList);
     }
 
@@ -119,16 +124,19 @@ public class CricketAnalyser {
     public String getPlayerBestBowlingEconomy() {
         checkIfNull(playersMap);
         Comparator<PlayerDAO> comparing = Comparator.comparingDouble(census -> census.economy);
-        ArrayList censusList= getSortedArray(comparing);
+        Predicate<PlayerDAO> filter = PlayerDAO.isEconomyZero();
+        ArrayList censusList= getSortedArray(comparing,filter);
         return getJson(censusList);
     }
+
 
     public String getPlayerBestSR5W4W() {
         checkIfNull(playersMap);
         Comparator<PlayerDAO> comparing = Comparator.comparingDouble(census -> census.bowlingSR);
-        comparing.thenComparingInt(census -> census.fiveWickets);
         comparing.thenComparingInt(census -> census.fourWickets);
-        ArrayList censusList= getSortedArray(comparing);
+        comparing.thenComparingInt(census -> census.fiveWickets);
+        Predicate<PlayerDAO> filter = PlayerDAO.isbowlingSRZero();
+        ArrayList censusList= getSortedArray(comparing,filter);
         return getJson(censusList);
     }
 
@@ -136,7 +144,8 @@ public class CricketAnalyser {
         checkIfNull(playersMap);
         Comparator<PlayerDAO> comparing = Comparator.comparingDouble(census -> census.bowlingAvg);
         comparing.thenComparingDouble(census -> census.bowlingSR);
-        ArrayList censusList= getSortedArray(comparing);
+        Predicate<PlayerDAO> filter = PlayerDAO.isAverageZero();
+        ArrayList censusList= getSortedArray(comparing,filter);
         return getJson(censusList);
     }
 
@@ -172,6 +181,10 @@ public class CricketAnalyser {
 
     private ArrayList getSortedArray(Comparator<PlayerDAO> comparing) {
         return playersMap.values().stream().sorted(comparing).map(playerDAO -> playerDAO.getCensusDTO(type)).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    private ArrayList getSortedArray(Comparator<PlayerDAO> comparing, Predicate<PlayerDAO> filter) {
+        return playersMap.values().stream().filter(filter).sorted(comparing).map(playerDAO -> playerDAO.getCensusDTO(type)).collect(Collectors.toCollection(ArrayList::new));
     }
 
     private String getJson(List list){

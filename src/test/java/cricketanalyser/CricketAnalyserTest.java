@@ -52,7 +52,7 @@ public class CricketAnalyserTest {
         cricketAnalyser.loadBatsmanData(BATSMAN_STATS_CSV_FILE_PATH);
         String sortedStats = cricketAnalyser.getPlayerBestSR6s4s();
         BatsmanCSV[] batsmanCSVS = new Gson().fromJson(sortedStats, BatsmanCSV[].class);
-        Assert.assertEquals("Ishant Sharma",batsmanCSVS[0].name);
+        Assert.assertEquals("Andre Russell",batsmanCSVS[0].name);
     }
 
     @Test
@@ -87,7 +87,7 @@ public class CricketAnalyserTest {
         cricketAnalyser.loadBowlerData(BOWLER_STATS_CSV_FILE_PATH);
         String sortedStats = cricketAnalyser.getPlayerBestBowlingAverage();
         BowlerCSV[] bowlerCSVS = new Gson().fromJson(sortedStats, BowlerCSV[].class);
-        Assert.assertEquals("Suresh Raina",bowlerCSVS[0].name);
+        Assert.assertEquals("Anukul Roy",bowlerCSVS[0].name);
     }
 
     @Test
@@ -96,7 +96,7 @@ public class CricketAnalyserTest {
         cricketAnalyser.loadBowlerData(BOWLER_STATS_CSV_FILE_PATH);
         String sortedStats = cricketAnalyser.getPlayerBestBowlingStrikerate();
         BowlerCSV[] bowlerCSVS = new Gson().fromJson(sortedStats, BowlerCSV[].class);
-        Assert.assertEquals("Suresh Raina",bowlerCSVS[0].name);
+        Assert.assertEquals("Alzarri Joseph",bowlerCSVS[0].name);
     }
 
     @Test
@@ -114,7 +114,7 @@ public class CricketAnalyserTest {
         cricketAnalyser.loadBowlerData(BOWLER_STATS_CSV_FILE_PATH);
         String sortedStats = cricketAnalyser.getPlayerBestSR5W4W();
         BowlerCSV[] bowlerCSVS = new Gson().fromJson(sortedStats, BowlerCSV[].class);
-        Assert.assertEquals("Suresh Raina",bowlerCSVS[0].name);
+        Assert.assertEquals("Alzarri Joseph",bowlerCSVS[0].name);
     }
 
     @Test
@@ -123,7 +123,7 @@ public class CricketAnalyserTest {
         cricketAnalyser.loadBowlerData(BOWLER_STATS_CSV_FILE_PATH);
         String sortedStats = cricketAnalyser.getPlayerBestAverageSR();
         BowlerCSV[] bowlerCSVS = new Gson().fromJson(sortedStats, BowlerCSV[].class);
-        Assert.assertEquals("Suresh Raina",bowlerCSVS[0].name);
+        Assert.assertEquals("Anukul Roy",bowlerCSVS[0].name);
     }
 
     @Test
