@@ -18,6 +18,7 @@ public class PlayerDAO {
     public int sixes;
     public int runsScored;
     public int boundries;
+    public int innings;
 
     public PlayerDAO(BowlerCSV playerCSV) {
         name = playerCSV.name;
@@ -37,6 +38,7 @@ public class PlayerDAO {
         runsScored=playerCSV.runsScored;
         sixes=playerCSV.sixes;
         boundries=fours+sixes;
+        innings = playerCSV.innings;
     }
 
     public static Predicate<PlayerDAO> isAverageZero() {
@@ -47,9 +49,13 @@ public class PlayerDAO {
         return p -> p.bowlingSR != 0;
     }
 
+    public static Predicate<PlayerDAO> areRunsAtleast(int i) {
+        return p -> p.runsScored>i;
+    }
+
     public Object getCensusDTO(PlayerAdapter.PLAYER_TYPE type) {
         if(type.equals(PlayerAdapter.PLAYER_TYPE.BATSMAN)){
-            return new BatsmanCSV(name,battingAvg,battingSR,fours,runsScored,sixes);
+            return new BatsmanCSV(name,battingAvg,battingSR,fours,runsScored,sixes,innings);
         }else{
             return new BowlerCSV(name,bowlingAvg,bowlingSR,economy,fiveWickets,fourWickets,wickets);
         }

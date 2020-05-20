@@ -7,6 +7,9 @@ version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    flatDir {
+        dirs 'D:\\bhavesh\\BhaveshKadam\\CensusAnalyser\\src\\main\\java\\censusanalyser\\csvBuilder'
+    }
 }
 
 dependencies {
@@ -15,4 +18,5 @@ dependencies {
     testImplementation 'org.hamcrest:hamcrest-library:1.3'
     compile 'com.google.code.gson:gson:2.2.+'
     compile "com.opencsv:opencsv:4.0"
+    implementation name: 'csvBuilder'
 }

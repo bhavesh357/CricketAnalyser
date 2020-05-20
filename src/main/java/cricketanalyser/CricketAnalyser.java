@@ -88,9 +88,9 @@ public class CricketAnalyser {
 
     public String getPlayerBestAverageStrikeRate() {
         checkIfNull(playersMap);
-        Comparator<PlayerDAO> comparing = Comparator.comparingDouble(census -> census.battingAvg);
-        comparing = comparing.thenComparingDouble(census -> census.battingSR);
-        ArrayList censusList= getSortedArray(comparing.reversed());
+        Comparator<PlayerDAO> comparing = Comparator.comparingDouble(census -> census.battingAvg+census.battingSR/2);
+        Predicate<PlayerDAO> filter = PlayerDAO.areRunsAtleast(100);
+        ArrayList censusList= getSortedArray(comparing.reversed(),filter);
         return getJson(censusList);
     }
 

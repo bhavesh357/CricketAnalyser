@@ -22,16 +22,20 @@ public class BatsmanCSV {
     @CsvBindByName(column = "6s", required = true)
     public int sixes;
 
+    @CsvBindByName(column = "Inns", required = true)
+    public int innings;
+
 
     public BatsmanCSV() {
     }
 
-    public BatsmanCSV(String name, Double battingAvg, Double battingSR, int fours, int runsScored, int sixes) {
+    public BatsmanCSV(String name, Double battingAvg, Double battingSR, int fours, int runsScored, int sixes, int innings) {
         this.name = name;
         this.runsScored = runsScored;
         this.battingAvg = battingAvg;
         this.battingSR = battingSR;
         this.fours = fours;
         this.sixes = sixes;
+        this.innings = innings;
     }
 }
